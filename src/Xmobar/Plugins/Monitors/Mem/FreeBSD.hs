@@ -27,7 +27,8 @@ parseMEM = do stats <- mapM sysctlReadUInt [
                 , "vm.stats.vm.v_cache_count"]
 
               let [ pagesize, totalpages, freepages, activepages, inactivepages, wiredpages, cachedpages ] = fmap fromIntegral stats
-                  usedpages = activepages + wiredpages + cachedpages
+                  -- usedpages = activepages + wiredpages + cachedpages
+                  usedpages = totalpages - freepages - inactivepages
                   availablepages = inactivepages + cachedpages + freepages
                   bufferedpages = activepages + inactivepages + wiredpages
 
